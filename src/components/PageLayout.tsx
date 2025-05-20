@@ -1,11 +1,12 @@
 
 import { Navigation } from "./Navigation";
 import { ReactNode, useState } from "react";
-import { Bell, Plus } from "lucide-react";
+import { Bell, Plus, User } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { useAuth } from "@/context/AuthContext";
 
 interface PageLayoutProps {
   children: ReactNode;
@@ -14,10 +15,11 @@ interface PageLayoutProps {
 
 export function PageLayout({ children, hideNavigation = false }: PageLayoutProps) {
   const [notifications, setNotifications] = useState([
-    { id: 1, message: "Welcome to E-Wallet!", read: false },
+    { id: 1, message: "Welcome to MrChapterVerse!", read: false },
     { id: 2, message: "Your account has been secured", read: false },
   ]);
   
+  const { isAuthenticated, user } = useAuth();
   const unreadCount = notifications.filter(n => !n.read).length;
 
   const markAsRead = (id: number) => {
@@ -32,7 +34,11 @@ export function PageLayout({ children, hideNavigation = false }: PageLayoutProps
   
   return (
     <div className="min-h-screen flex flex-col bg-wallet-background pb-16">
-      <header className="p-4 flex justify-end">
+      <header className="p-4 flex justify-between items-center">
+        <div className="flex items-center">
+          <img src="/src/assets/logo.svg" alt="MrChapterVerse Logo" className="w-8 h-8 mr-2" />
+          <span className="font-semibold text-lg hidden sm:inline">MrChapterVerse</span>
+        </div>
         <Popover>
           <PopoverTrigger asChild>
             <Button variant="ghost" size="icon" className="relative">
@@ -97,8 +103,8 @@ export function PageLayout({ children, hideNavigation = false }: PageLayoutProps
           <div className="pt-6">
             <h3 className="text-lg font-medium text-center mb-6">Quick Actions</h3>
             <div className="grid grid-cols-3 gap-4">
-              <QuickActionButton label="Scan QR" icon="qr" />
-              <QuickActionButton label="Send Money" icon="send" />
+              <QuickActionButton label="Scan QR" icon="qr" onClick={() => window.location.href = "/scan"} />
+              <QuickActionButton label="Send Money" icon="send" onClick={() => window.location.href = "/transfer"} />
               <QuickActionButton label="Request" icon="request" />
               <QuickActionButton label="Pay Bill" icon="bill" />
               <QuickActionButton label="Top Up" icon="topup" />
@@ -111,7 +117,15 @@ export function PageLayout({ children, hideNavigation = false }: PageLayoutProps
   );
 }
 
-function QuickActionButton({ label, icon }: { label: string; icon: string }) {
+function QuickActionButton({ 
+  label, 
+  icon, 
+  onClick 
+}: { 
+  label: string; 
+  icon: string; 
+  onClick?: () => void;
+}) {
   const getIconClass = () => {
     switch(icon) {
       case 'qr': return 'bg-wallet-primary';
@@ -125,7 +139,7 @@ function QuickActionButton({ label, icon }: { label: string; icon: string }) {
   };
 
   return (
-    <button className="flex flex-col items-center">
+    <button className="flex flex-col items-center" onClick={onClick}>
       <div className={`h-12 w-12 rounded-full ${getIconClass()} flex items-center justify-center mb-1`}>
         <span className="text-white text-lg">{icon.charAt(0).toUpperCase()}</span>
       </div>

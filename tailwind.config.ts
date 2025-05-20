@@ -59,10 +59,10 @@ export default {
 					accent: '#FFB600',
 					success: '#00C853',
 					danger: '#FF3B30',
-					background: '#F8FAFC',
-					card: '#FFFFFF',
-					text: '#1A1F36',
-					'text-secondary': '#64748B',
+					background: '#0a4430', // Dark green background
+					card: '#0a3825',     // Slightly lighter dark green for cards
+					text: '#FFFFFF',     // White text
+					'text-secondary': '#c0c0c0', // Light gray for secondary text
 				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
